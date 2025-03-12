@@ -190,7 +190,7 @@ chrome.action.onClicked.addListener((tab) => {
                         target: {tabId: tab.id, allFrames: true},
                         func: extract,
                         args: [tab.url],
-                    }, (injectionResults) => {
+                    }).then(injectionResults => {
                         let extractedVideos = extractVideosFromInjectionResults(injectionResults);
 
                         if (extractedVideos.length == 0) {

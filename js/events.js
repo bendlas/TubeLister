@@ -186,11 +186,7 @@ chrome.action.onClicked.addListener((tab) => {
 
                     var isActiveTab = (tab.active && tab.windowId == currentWindowId);
 
-                    chrome.scripting.executeScript({
-                        target: {tabId: tab.id, allFrames: true},
-                        func: extract,
-                        args: [tab.url],
-                    }).then(injectionResults => {
+                    function afterInjection(injectionResults) {
                         let extractedVideos = extractVideosFromInjectionResults(injectionResults);
 
                         if (extractedVideos.length == 0) {
@@ -229,7 +225,13 @@ chrome.action.onClicked.addListener((tab) => {
                         });
 
                         advanceProcessTabsAndCompress();
-                    });
+                    }
+
+                    chrome.scripting.executeScript({
+                        target: {tabId: tab.id, allFrames: true},
+                        func: extract,
+                        args: [tab.url],
+                    }).then(afterInjection);
                 });
             });
     });
